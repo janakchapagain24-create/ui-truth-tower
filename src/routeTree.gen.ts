@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BlockedRouteImport } from './routes/blocked'
+import { Route as ApiCoachRouteImport } from './routes/api/coach'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppCoachRouteImport } from './routes/app.coach'
 import { Route as AppCommunityRouteImport } from './routes/app.community'
@@ -36,6 +37,11 @@ const AppRoute = AppRouteImport.update({
 const BlockedRoute = BlockedRouteImport.update({
   id: '/blocked',
   path: '/blocked',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCoachRoute = ApiCoachRouteImport.update({
+  id: '/api/coach',
+  path: '/api/coach',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -123,6 +131,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -154,6 +164,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -185,6 +197,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   BlockedRoute: typeof BlockedRoute
+  ApiCoachRoute: typeof ApiCoachRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -208,6 +221,13 @@ declare module '@tanstack/react-router' {
       path: '/blocked'
       fullPath: '/blocked'
       preLoaderRoute: typeof BlockedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/coach': {
+      id: '/api/coach'
+      path: '/api/coach'
+      fullPath: '/api/coach'
+      preLoaderRoute: typeof ApiCoachRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -315,6 +335,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   BlockedRoute: BlockedRoute,
+  ApiCoachRoute: ApiCoachRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
