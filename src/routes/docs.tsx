@@ -157,6 +157,7 @@ Next (Anchor):
 Vault PDA [user, start, days, guardian]
    ├─ unlock()  after milestone date  → back to user
    └─ release() guardian co-sign       → partner / charity`}</pre></Box>
+    <Grid><Card t="Live now" d="Devnet wallet connect, test airdrop, signed memo commitments, explorer links." /><Card t="Privacy by design" d="No addiction status on-chain — only a commitment memo and locked stake." /></Grid>
     <H>Deep dive: Phase 4 Web3 specs</H>
     <Box className="font-mono text-xs leading-relaxed md:text-sm"><pre className="overflow-x-auto whitespace-pre">{`Anchor program "vault"
   initialize(user, start_ts, days, guardian, stake)
