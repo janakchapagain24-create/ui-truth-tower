@@ -14,16 +14,232 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      cheers: {
+        Row: {
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          post_id: string
+          user_id?: string
+        }
+        Update: {
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cheers_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      comments: {
+        Row: {
+          author_name: string
+          created_at: string
+          id: string
+          post_id: string
+          text: string
+          user_id: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          id?: string
+          post_id: string
+          text: string
+          user_id?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          id?: string
+          post_id?: string
+          text?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      early_access: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          platform: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          platform: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          platform?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      posts: {
+        Row: {
+          author_name: string
+          created_at: string
+          id: string
+          tag: string
+          text: string
+          user_id: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          id?: string
+          tag?: string
+          text: string
+          user_id?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          id?: string
+          tag?: string
+          text?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string
+          id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_state: {
+        Row: {
+          extra: Json
+          state: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          extra?: Json
+          state?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          extra?: Json
+          state?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      work_submissions: {
+        Row: {
+          challenge_id: string
+          challenge_title: string
+          claimed: boolean
+          created_at: string
+          id: string
+          proof_url: string | null
+          reviewed_at: string | null
+          reviewer_note: string | null
+          reward: number
+          status: string
+          summary: string
+          user_id: string
+        }
+        Insert: {
+          challenge_id: string
+          challenge_title: string
+          claimed?: boolean
+          created_at?: string
+          id?: string
+          proof_url?: string | null
+          reviewed_at?: string | null
+          reviewer_note?: string | null
+          reward?: number
+          status?: string
+          summary: string
+          user_id?: string
+        }
+        Update: {
+          challenge_id?: string
+          challenge_title?: string
+          claimed?: boolean
+          created_at?: string
+          id?: string
+          proof_url?: string | null
+          reviewed_at?: string | null
+          reviewer_note?: string | null
+          reward?: number
+          status?: string
+          summary?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +366,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
