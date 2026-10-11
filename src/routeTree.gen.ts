@@ -10,33 +10,169 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as BlockedRouteImport } from './routes/blocked'
+import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppCoachRouteImport } from './routes/app.coach'
+import { Route as AppCommunityRouteImport } from './routes/app.community'
+import { Route as AppEmergencyRouteImport } from './routes/app.emergency'
+import { Route as AppMissionsRouteImport } from './routes/app.missions'
+import { Route as AppProgressRouteImport } from './routes/app.progress'
+import { Route as AppProtectRouteImport } from './routes/app.protect'
+import { Route as AppRebuildRouteImport } from './routes/app.rebuild'
+import { Route as AppWorkRouteImport } from './routes/app.work'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlockedRoute = BlockedRouteImport.update({
+  id: '/blocked',
+  path: '/blocked',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCoachRoute = AppCoachRouteImport.update({
+  id: '/coach',
+  path: '/coach',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCommunityRoute = AppCommunityRouteImport.update({
+  id: '/community',
+  path: '/community',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppEmergencyRoute = AppEmergencyRouteImport.update({
+  id: '/emergency',
+  path: '/emergency',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMissionsRoute = AppMissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProgressRoute = AppProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProtectRoute = AppProtectRouteImport.update({
+  id: '/protect',
+  path: '/protect',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRebuildRoute = AppRebuildRouteImport.update({
+  id: '/rebuild',
+  path: '/rebuild',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWorkRoute = AppWorkRouteImport.update({
+  id: '/work',
+  path: '/work',
+  getParentRoute: () => AppRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/blocked': typeof BlockedRoute
+  '/app/coach': typeof AppCoachRoute
+  '/app/community': typeof AppCommunityRoute
+  '/app/emergency': typeof AppEmergencyRoute
+  '/app/missions': typeof AppMissionsRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/protect': typeof AppProtectRoute
+  '/app/rebuild': typeof AppRebuildRoute
+  '/app/work': typeof AppWorkRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/blocked': typeof BlockedRoute
+  '/app/coach': typeof AppCoachRoute
+  '/app/community': typeof AppCommunityRoute
+  '/app/emergency': typeof AppEmergencyRoute
+  '/app/missions': typeof AppMissionsRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/protect': typeof AppProtectRoute
+  '/app/rebuild': typeof AppRebuildRoute
+  '/app/work': typeof AppWorkRoute
+  '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/blocked': typeof BlockedRoute
+  '/app/coach': typeof AppCoachRoute
+  '/app/community': typeof AppCommunityRoute
+  '/app/emergency': typeof AppEmergencyRoute
+  '/app/missions': typeof AppMissionsRoute
+  '/app/progress': typeof AppProgressRoute
+  '/app/protect': typeof AppProtectRoute
+  '/app/rebuild': typeof AppRebuildRoute
+  '/app/work': typeof AppWorkRoute
+  '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/app'
+    | '/blocked'
+    | '/app/coach'
+    | '/app/community'
+    | '/app/emergency'
+    | '/app/missions'
+    | '/app/progress'
+    | '/app/protect'
+    | '/app/rebuild'
+    | '/app/work'
+    | '/app/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/blocked'
+    | '/app/coach'
+    | '/app/community'
+    | '/app/emergency'
+    | '/app/missions'
+    | '/app/progress'
+    | '/app/protect'
+    | '/app/rebuild'
+    | '/app/work'
+    | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/app'
+    | '/blocked'
+    | '/app/coach'
+    | '/app/community'
+    | '/app/emergency'
+    | '/app/missions'
+    | '/app/progress'
+    | '/app/protect'
+    | '/app/rebuild'
+    | '/app/work'
+    | '/app/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  BlockedRoute: typeof BlockedRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +184,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blocked': {
+      id: '/blocked'
+      path: '/blocked'
+      fullPath: '/blocked'
+      preLoaderRoute: typeof BlockedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/coach': {
+      id: '/app/coach'
+      path: '/coach'
+      fullPath: '/app/coach'
+      preLoaderRoute: typeof AppCoachRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/community': {
+      id: '/app/community'
+      path: '/community'
+      fullPath: '/app/community'
+      preLoaderRoute: typeof AppCommunityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/emergency': {
+      id: '/app/emergency'
+      path: '/emergency'
+      fullPath: '/app/emergency'
+      preLoaderRoute: typeof AppEmergencyRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/missions': {
+      id: '/app/missions'
+      path: '/missions'
+      fullPath: '/app/missions'
+      preLoaderRoute: typeof AppMissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/progress': {
+      id: '/app/progress'
+      path: '/progress'
+      fullPath: '/app/progress'
+      preLoaderRoute: typeof AppProgressRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/protect': {
+      id: '/app/protect'
+      path: '/protect'
+      fullPath: '/app/protect'
+      preLoaderRoute: typeof AppProtectRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/rebuild': {
+      id: '/app/rebuild'
+      path: '/rebuild'
+      fullPath: '/app/rebuild'
+      preLoaderRoute: typeof AppRebuildRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/work': {
+      id: '/app/work'
+      path: '/work'
+      fullPath: '/app/work'
+      preLoaderRoute: typeof AppWorkRouteImport
+      parentRoute: typeof AppRoute
+    }
   }
 }
 
+interface AppRouteChildren {
+  AppCoachRoute: typeof AppCoachRoute
+  AppCommunityRoute: typeof AppCommunityRoute
+  AppEmergencyRoute: typeof AppEmergencyRoute
+  AppMissionsRoute: typeof AppMissionsRoute
+  AppProgressRoute: typeof AppProgressRoute
+  AppProtectRoute: typeof AppProtectRoute
+  AppRebuildRoute: typeof AppRebuildRoute
+  AppWorkRoute: typeof AppWorkRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppCoachRoute: AppCoachRoute,
+  AppCommunityRoute: AppCommunityRoute,
+  AppEmergencyRoute: AppEmergencyRoute,
+  AppMissionsRoute: AppMissionsRoute,
+  AppProgressRoute: AppProgressRoute,
+  AppProtectRoute: AppProtectRoute,
+  AppRebuildRoute: AppRebuildRoute,
+  AppWorkRoute: AppWorkRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  BlockedRoute: BlockedRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
