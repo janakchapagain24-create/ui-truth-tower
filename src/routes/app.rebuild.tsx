@@ -1,3 +1,4 @@
+import { DebtOrganizer } from "@/components/oc/DebtOrganizer";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { X } from "lucide-react";
@@ -60,6 +61,8 @@ function Rebuild() {
           ))}
         </ol>
       </Card>
+
+      <DebtOrganizer />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {[["30-day plan", ["Week 1: protection + routine", "Week 2: practice your top skill daily", "Week 3: write one clear service offer", "Week 4: reach out to 5 people"]],

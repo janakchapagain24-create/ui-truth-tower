@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as BlockedRouteImport } from './routes/blocked'
+import { Route as ApiCoachRouteImport } from './routes/api/coach'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppCoachRouteImport } from './routes/app.coach'
 import { Route as AppCommunityRouteImport } from './routes/app.community'
@@ -21,6 +22,7 @@ import { Route as AppMissionsRouteImport } from './routes/app.missions'
 import { Route as AppProgressRouteImport } from './routes/app.progress'
 import { Route as AppProtectRouteImport } from './routes/app.protect'
 import { Route as AppRebuildRouteImport } from './routes/app.rebuild'
+import { Route as AppVaultRouteImport } from './routes/app.vault'
 import { Route as AppWorkRouteImport } from './routes/app.work'
 
 const IndexRoute = IndexRouteImport.update({
@@ -36,6 +38,11 @@ const AppRoute = AppRouteImport.update({
 const BlockedRoute = BlockedRouteImport.update({
   id: '/blocked',
   path: '/blocked',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCoachRoute = ApiCoachRouteImport.update({
+  id: '/api/coach',
+  path: '/api/coach',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -83,6 +90,11 @@ const AppRebuildRoute = AppRebuildRouteImport.update({
   path: '/rebuild',
   getParentRoute: () => AppRoute,
 } as any)
+const AppVaultRoute = AppVaultRouteImport.update({
+  id: '/vault',
+  path: '/vault',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppWorkRoute = AppWorkRouteImport.update({
   id: '/work',
   path: '/work',
@@ -93,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -101,12 +114,14 @@ export interface FileRoutesByFullPath {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -115,6 +130,7 @@ export interface FileRoutesByTo {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app': typeof AppIndexRoute
 }
@@ -123,6 +139,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
   '/blocked': typeof BlockedRoute
+  '/api/coach': typeof ApiCoachRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -131,6 +148,7 @@ export interface FileRoutesById {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app/': typeof AppIndexRoute
 }
@@ -140,6 +158,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -148,12 +167,14 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -162,6 +183,7 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app'
   id:
@@ -169,6 +191,7 @@ export interface FileRouteTypes {
     | '/'
     | '/app'
     | '/blocked'
+    | '/api/coach'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -177,6 +200,7 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -185,6 +209,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
   BlockedRoute: typeof BlockedRoute
+  ApiCoachRoute: typeof ApiCoachRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -208,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/blocked'
       fullPath: '/blocked'
       preLoaderRoute: typeof BlockedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/coach': {
+      id: '/api/coach'
+      path: '/api/coach'
+      fullPath: '/api/coach'
+      preLoaderRoute: typeof ApiCoachRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -273,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRebuildRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/vault': {
+      id: '/app/vault'
+      path: '/vault'
+      fullPath: '/app/vault'
+      preLoaderRoute: typeof AppVaultRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/work': {
       id: '/app/work'
       path: '/work'
@@ -292,6 +331,7 @@ interface AppRouteChildren {
   AppProgressRoute: typeof AppProgressRoute
   AppProtectRoute: typeof AppProtectRoute
   AppRebuildRoute: typeof AppRebuildRoute
+  AppVaultRoute: typeof AppVaultRoute
   AppWorkRoute: typeof AppWorkRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -305,6 +345,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProgressRoute: AppProgressRoute,
   AppProtectRoute: AppProtectRoute,
   AppRebuildRoute: AppRebuildRoute,
+  AppVaultRoute: AppVaultRoute,
   AppWorkRoute: AppWorkRoute,
   AppIndexRoute: AppIndexRoute,
 }
@@ -315,6 +356,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
   BlockedRoute: BlockedRoute,
+  ApiCoachRoute: ApiCoachRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

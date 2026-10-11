@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { X, Timer } from "lucide-react";
 import { Card, PageHeader, Eyebrow } from "@/components/oc/ui";
+import { rewardUrgeSurf, GAME_REWARD } from "@/lib/store";
 
 export const Route = createFileRoute("/app/games")({
   head: () => ({ meta: [
@@ -29,6 +30,13 @@ export const GAMES = [
 function Games() {
   const [open, setOpen] = useState<(typeof GAMES)[number] | null>(null);
   const [secs, setSecs] = useState(0);
+  const [toast, setToast] = useState("");
+  function close() {
+    const ok = rewardUrgeSurf(secs);
+    setToast(ok ? `You rode it out. +${GAME_REWARD} credits` : secs >= 180 ? "Nice work. Daily game rewards already earned." : "Play 3+ minutes to earn credits.");
+    setTimeout(() => setToast(""), 3500);
+    setOpen(null);
+  }
   useEffect(() => {
     if (!open) return;
     setSecs(0);
@@ -51,6 +59,7 @@ function Games() {
         ))}
       </div>
 
+      {toast && <div className="fixed inset-x-5 top-5 z-[60] mx-auto max-w-sm rounded-full bg-primary px-5 py-3 text-center text-sm font-medium text-primary-foreground shadow-lg">{toast}</div>}
       {open && (
         <div className="fixed inset-0 z-50 flex flex-col bg-background">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-4 py-3">
@@ -63,7 +72,7 @@ function Games() {
                 </p>
               </div>
             </div>
-            <button aria-label="Close game" onClick={() => setOpen(null)} className="glass grid size-10 place-items-center rounded-full"><X className="size-4" /></button>
+            <button aria-label="Close game" onClick={close} className="glass grid size-10 place-items-center rounded-full"><X className="size-4" /></button>
           </div>
           <iframe title={open.name} src={open.url} className="w-full flex-1 border-0 bg-card" allow="fullscreen; autoplay" />
         </div>
