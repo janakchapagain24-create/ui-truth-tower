@@ -22,6 +22,7 @@ import { Route as AppMissionsRouteImport } from './routes/app.missions'
 import { Route as AppProgressRouteImport } from './routes/app.progress'
 import { Route as AppProtectRouteImport } from './routes/app.protect'
 import { Route as AppRebuildRouteImport } from './routes/app.rebuild'
+import { Route as AppVaultRouteImport } from './routes/app.vault'
 import { Route as AppWorkRouteImport } from './routes/app.work'
 
 const IndexRoute = IndexRouteImport.update({
@@ -89,6 +90,11 @@ const AppRebuildRoute = AppRebuildRouteImport.update({
   path: '/rebuild',
   getParentRoute: () => AppRoute,
 } as any)
+const AppVaultRoute = AppVaultRouteImport.update({
+  id: '/vault',
+  path: '/vault',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppWorkRoute = AppWorkRouteImport.update({
   id: '/work',
   path: '/work',
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app/': typeof AppIndexRoute
 }
@@ -123,6 +130,7 @@ export interface FileRoutesByTo {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app': typeof AppIndexRoute
 }
@@ -140,6 +148,7 @@ export interface FileRoutesById {
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
   '/app/rebuild': typeof AppRebuildRoute
+  '/app/vault': typeof AppVaultRoute
   '/app/work': typeof AppWorkRoute
   '/app/': typeof AppIndexRoute
 }
@@ -158,6 +167,7 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app/'
   fileRoutesByTo: FileRoutesByTo
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app'
   id:
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/app/progress'
     | '/app/protect'
     | '/app/rebuild'
+    | '/app/vault'
     | '/app/work'
     | '/app/'
   fileRoutesById: FileRoutesById
@@ -293,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRebuildRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/vault': {
+      id: '/app/vault'
+      path: '/vault'
+      fullPath: '/app/vault'
+      preLoaderRoute: typeof AppVaultRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/work': {
       id: '/app/work'
       path: '/work'
@@ -312,6 +331,7 @@ interface AppRouteChildren {
   AppProgressRoute: typeof AppProgressRoute
   AppProtectRoute: typeof AppProtectRoute
   AppRebuildRoute: typeof AppRebuildRoute
+  AppVaultRoute: typeof AppVaultRoute
   AppWorkRoute: typeof AppWorkRoute
   AppIndexRoute: typeof AppIndexRoute
 }
@@ -325,6 +345,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppProgressRoute: AppProgressRoute,
   AppProtectRoute: AppProtectRoute,
   AppRebuildRoute: AppRebuildRoute,
+  AppVaultRoute: AppVaultRoute,
   AppWorkRoute: AppWorkRoute,
   AppIndexRoute: AppIndexRoute,
 }

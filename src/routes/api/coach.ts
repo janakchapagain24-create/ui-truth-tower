@@ -15,7 +15,7 @@ export const Route = createFileRoute("/api/coach")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const key = process.env.LOVABLE_API_KEY;
+        const key = process.env["LOVABLE_API_KEY"];
         if (!key) return Response.json({ error: "Coach is not configured." }, { status: 500 });
         let messages: ModelMessage[];
         try {
