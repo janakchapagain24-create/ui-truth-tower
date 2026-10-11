@@ -1,5 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { enterDemo, exitDemo, isDemo } from "@/lib/demo";
+
+function JudgeToggle() {
+  const [on, setOn] = useState(false);
+  useEffect(() => setOn(isDemo()), []);
+  return (
+    <button onClick={() => { if (on) exitDemo(); else enterDemo(); setOn(!on); }}
+      className="glass flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left text-sm">
+      <span><span className="font-semibold">Judge demo</span> <span className="text-muted-foreground">· {on ? "Day 14 sample profile loaded" : "load a Day 14 recovery profile"}</span></span>
+      <span className={`relative h-6 w-11 shrink-0 rounded-full transition ${on ? "bg-gradient-accent" : "bg-secondary"}`}>
+        <span className={`absolute top-0.5 size-5 rounded-full bg-background transition-all ${on ? "left-[22px]" : "left-0.5"}`} />
+      </span>
+    </button>
+  );
+}
 import { ShieldCheck, Heart, MessageCircle, Send, Bookmark, Plus, X, Gamepad2, Check, Siren } from "lucide-react";
 import { Card, Chip, Button, DemoNote } from "@/components/oc/ui";
 import { MISSIONS } from "@/lib/missions";
@@ -78,6 +93,8 @@ function HomePage() {
           </button>
         ))}
       </div>
+
+      <JudgeToggle />
 
       {/* Status */}
       <Card className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-4 p-4">
