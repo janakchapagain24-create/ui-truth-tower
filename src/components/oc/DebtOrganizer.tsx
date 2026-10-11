@@ -31,7 +31,7 @@ export function DebtOrganizer() {
     <Card className="space-y-5">
       <div>
         <h2 className="text-lg font-semibold">Debt organizer</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Private to this device. Lay it all out once — then it's just a plan.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Private to you — saved to your account when signed in. Lay it all out once — then it's just a plan.</p>
       </div>
       <form onSubmit={add} className="grid grid-cols-2 gap-2 md:grid-cols-5">
         <input className={inp + " col-span-2 md:col-span-1"} placeholder="Name (e.g. Card)" value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} />

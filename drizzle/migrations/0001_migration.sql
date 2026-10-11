@@ -1,0 +1,1 @@
+alter publication supabase_realtime add table public.posts, public.cheers, public.comments;

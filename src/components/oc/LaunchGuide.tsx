@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Apple, Smartphone, Clock, Rocket } from "lucide-react";
+import { toast } from "sonner";
 import { Card, Button, Chip, Eyebrow } from "./ui";
+import { supabase } from "@/integrations/supabase/client";
 
 const KEY = "oc-beta-waitlist";
 
@@ -38,10 +40,13 @@ export function LaunchGuide() {
   const [platform, setPlatform] = useState("iPhone");
   useEffect(() => { try { const v = localStorage.getItem(KEY); if (v) setJoined(JSON.parse(v)); } catch {} }, []);
 
-  function join(e: React.FormEvent) {
+  async function join(e: React.FormEvent) {
     e.preventDefault();
     if (!/^\S+@\S+\.\S+$/.test(email)) return;
-    const v = { email, platform };
+    const v = { email: email.trim().toLowerCase(), platform };
+    const { data: u } = await supabase.auth.getUser();
+    const { error } = await supabase.from("early_access").insert({ ...v, user_id: u.user?.id ?? null });
+    if (error && error.code !== "23505") { toast.error("Couldn't join right now. Try again."); return; }
     localStorage.setItem(KEY, JSON.stringify(v));
     setJoined(v);
   }
@@ -65,7 +70,7 @@ export function LaunchGuide() {
       ))}
       <p className="text-xs text-muted-foreground">No blocker is perfect. One Chance makes gambling much harder to reach, alongside the people and tools that help you.</p>
       {joined ? (
-        <p className="rounded-2xl bg-muted p-4 text-sm">You're on the early-access list for <b>{joined.platform}</b> ({joined.email}). Saved on this device only for now.</p>
+        <p className="rounded-2xl bg-muted p-4 text-sm">You're on the early-access list for <b>{joined.platform}</b> ({joined.email}). We'll email you when it's ready to download.</p>
       ) : (
         <form onSubmit={join} className="space-y-3">
           <p className="text-sm font-medium">Join early access</p>

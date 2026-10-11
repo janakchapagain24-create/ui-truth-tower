@@ -2,6 +2,7 @@ import { Link, Outlet } from "@tanstack/react-router";
 import { Home, Shield, Target, Hammer, Briefcase, MessageCircle, Users, TrendingUp, Siren, Gamepad2, Lock } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
+import { AccountButton } from "./AccountButton";
 
 const NAV = [
   { to: "/app", label: "Home", icon: Home },
@@ -22,7 +23,7 @@ export function AppShell() {
   return (
     <div className="min-h-screen md:flex">
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar/60 p-5 backdrop-blur-xl md:flex">
-        <div className="mb-8 flex items-center justify-between px-2"><Link to="/"><Logo /></Link><ThemeToggle /></div>
+        <div className="mb-8 flex items-center justify-between px-2"><Link to="/"><Logo /></Link><div className="flex gap-2"><AccountButton /><ThemeToggle /></div></div>
         <nav className="flex flex-1 flex-col gap-1">
           {NAV.map(({ to, label, icon: Icon }) => (
             <Link key={to} to={to} activeOptions={{ exact: to === "/app" }}
@@ -40,7 +41,7 @@ export function AppShell() {
       <main className="flex-1 px-5 pb-36 pt-6 md:px-10 md:pb-16 md:pt-10">
         <div className="mb-6 flex items-center justify-between md:hidden">
           <Logo />
-          <ThemeToggle />
+          <div className="flex gap-2"><AccountButton /><ThemeToggle /></div>
         </div>
         <div className="mx-auto max-w-5xl"><Outlet /></div>
       </main>
