@@ -88,3 +88,55 @@ export function levelOf(credits: number) {
   const idx = Math.min(LEVELS.length - 1, Math.floor(credits / 100));
   return { idx, name: LEVELS[idx], progress: credits % 100 };
 }
+
+// ---- Extended state (games rewards, coach usage, debts, pledges) ----
+export type Debt = { id: string; name: string; balance: number; rate: number; min: number };
+export type Pledge = { days: number; sol: number; partner: string; sig: string; date: string; wallet: string };
+export type Extra = {
+  gameRewards: Record<string, number>; // date -> rewards given that day
+  surfMinutes: number;
+  coach: { date: string; count: number };
+  debts: Debt[];
+  pledges: Pledge[];
+};
+const XKEY = "one-chance-extra-v1";
+const xInitial: Extra = { gameRewards: {}, surfMinutes: 0, coach: { date: "", count: 0 }, debts: [], pledges: [] };
+let xs: Extra = xInitial;
+let xLoaded = false;
+const xListeners = new Set<() => void>();
+function xLoad() {
+  if (xLoaded || typeof window === "undefined") return;
+  xLoaded = true;
+  try { const r = localStorage.getItem(XKEY); if (r) xs = { ...xInitial, ...JSON.parse(r) }; } catch { /* ignore */ }
+}
+export function setExtra(fn: (s: Extra) => Extra) {
+  xLoad(); xs = fn(xs); localStorage.setItem(XKEY, JSON.stringify(xs)); xListeners.forEach((l) => l());
+}
+export function useExtra(): Extra {
+  return useSyncExternalStore(
+    (l) => { xLoad(); xListeners.add(l); l(); return () => xListeners.delete(l); },
+    () => { xLoad(); return xs; },
+    () => xInitial,
+  );
+}
+
+export const GAME_REWARD = 20;
+export const GAME_REWARD_MIN_SECONDS = 180;
+export const GAME_REWARDS_PER_DAY = 3;
+/** Award credits for riding out an urge in a game. Returns true if awarded. */
+export function rewardUrgeSurf(seconds: number, day = today()): boolean {
+  if (seconds < GAME_REWARD_MIN_SECONDS) return false;
+  xLoad();
+  if ((xs.gameRewards[day] ?? 0) >= GAME_REWARDS_PER_DAY) return false;
+  setExtra((x) => ({ ...x, gameRewards: { ...x.gameRewards, [day]: (x.gameRewards[day] ?? 0) + 1 }, surfMinutes: x.surfMinutes + Math.floor(seconds / 60) }));
+  setState((s) => ({ ...s, credits: s.credits + GAME_REWARD, urgesResisted: s.urgesResisted + 1 }));
+  return true;
+}
+
+export const COACH_FREE_PER_DAY = 10;
+export function coachRemaining(x: Extra, day = today()) {
+  return x.coach.date === day ? Math.max(0, COACH_FREE_PER_DAY - x.coach.count) : COACH_FREE_PER_DAY;
+}
+export function useCoachMessage(day = today()) {
+  setExtra((x) => ({ ...x, coach: { date: day, count: x.coach.date === day ? x.coach.count + 1 : 1 } }));
+}
