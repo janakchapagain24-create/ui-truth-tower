@@ -1,8 +1,7 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import { Home, Shield, Target, Hammer, Briefcase, Sparkles as _s, MessageCircle, Users, TrendingUp, Siren } from "lucide-react";
+import { Home, Shield, Target, Hammer, Briefcase, MessageCircle, Users, TrendingUp, Siren } from "lucide-react";
 import { Logo } from "./Logo";
 
-void _s;
 const NAV = [
   { to: "/app", label: "Home", icon: Home },
   { to: "/app/protect", label: "Protect", icon: Shield },
