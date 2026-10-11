@@ -97,7 +97,7 @@ function Vault() {
             return (
               <li key={p.sig} className="rounded-2xl bg-muted p-4 text-sm">
                 <div className="flex items-center justify-between"><span className="font-medium">{p.days}-day commitment{p.sol ? ` · ${p.sol} SOL` : ""}</span>
-                  <a href={`https://explorer.solana.com/tx/${p.sig}?cluster=devnet`} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs underline">On-chain <ExternalLink className="size-3" /></a></div>
+                  {p.sig === "demo" ? <span className="text-xs text-muted-foreground">Demo sample</span> : <a href={`https://explorer.solana.com/tx/${p.sig}?cluster=devnet`} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-xs underline">On-chain <ExternalLink className="size-3" /></a>}</div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-background"><div className="h-full bg-gradient-accent" style={{ width: `${Math.min(100, (done / p.days) * 100)}%` }} /></div>
                 <p className="mt-1 text-xs text-muted-foreground">{Math.min(done, p.days)} / {p.days} days{done >= p.days ? " — milestone reached. Ask for your stake back." : ""}</p>
               </li>
