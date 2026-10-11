@@ -1,6 +1,7 @@
 # One Chance roadmap
 
 - [x] Design system, landing page, app shell (sidebar + mobile nav + emergency button)
+- [x] Light/dark mode, Instagram-style Home feed (stories, double-tap cheers, share-a-win), Games arcade
 - [x] Home, Protect, Missions, Emergency mode, Rebuild, Work (sample), Community (sample), Progress + setback flow, Block screen
 - [ ] Accounts + onboarding (Lovable Cloud) — move saved data off the device
 - [ ] Live AI Coach (10 free msgs/day, never affects protection)
