@@ -55,8 +55,8 @@ function Vault() {
 
   return (
     <div className="space-y-6">
-      <PageHeader eyebrow="Built on Solana" title="Commitment Vault" sub="Make a promise to yourself that can't be quietly erased. Written on-chain, with no mention of gambling." />
-      <DemoNote>Runs on Solana Devnet (test money only). Your stake goes to your trusted person, who returns it when you reach your milestone.</DemoNote>
+      <PageHeader eyebrow="Built on Solana" title="Commitment Vault" sub="A promise to yourself, witnessed by someone you trust. No money needed. Written on-chain with no mention of gambling." />
+      <DemoNote>Runs on Solana Devnet (test money only). Commitments are free by default. A setback never cancels your days, costs credits or loses money — you can start again anytime.</DemoNote>
 
       <Card className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -79,12 +79,13 @@ function Vault() {
           <Eyebrow className="mb-2">I commit to</Eyebrow>
           <div className="flex flex-wrap gap-2">{DAYS.map((d) => <Chip key={d} active={days === d} onClick={() => setDays(d)}>{d} days</Chip>)}</div>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="text-sm"><Eyebrow className="mb-2">Optional stake (SOL)</Eyebrow>
-            <input inputMode="decimal" value={sol} onChange={(e) => setSol(e.target.value)} className="w-full rounded-2xl bg-muted px-4 py-3 outline-none focus:ring-2 focus:ring-ring" /></label>
-          <label className="text-sm"><Eyebrow className="mb-2">Trusted person's wallet</Eyebrow>
-            <input value={partner} onChange={(e) => setPartner(e.target.value)} placeholder="Solana address" className="w-full rounded-2xl bg-muted px-4 py-3 outline-none focus:ring-2 focus:ring-ring" /></label>
-        </div>
+        <label className="block text-sm"><Eyebrow className="mb-2">Trusted person's wallet (optional witness)</Eyebrow>
+          <input value={partner} onChange={(e) => setPartner(e.target.value)} placeholder="Solana address" className="w-full rounded-2xl bg-muted px-4 py-3 outline-none focus:ring-2 focus:ring-ring" /></label>
+        <details className="rounded-2xl bg-muted p-4 text-sm" onToggle={(e) => { if (!(e.target as HTMLDetailsElement).open) setSol("0"); }}>
+          <summary className="cursor-pointer text-muted-foreground">Advanced: add a stake (not recommended if money is a stress)</summary>
+          <p className="mt-2 text-xs text-muted-foreground">Putting money behind a promise can feel like another bet. Most people don't need it. Any stake goes to your trusted person to hold — it is not escrow.</p>
+          <input inputMode="decimal" value={sol} onChange={(e) => setSol(e.target.value)} className="mt-3 w-full rounded-2xl bg-background px-4 py-3 outline-none focus:ring-2 focus:ring-ring" />
+        </details>
         <Button variant="solid" onClick={commit} disabled={!addr || !!busy}><Lock className="size-4" /> {busy === "pledge" ? "Confirm in wallet…" : "Sign commitment"}</Button>
         {err && <p className="text-sm text-destructive">{err}</p>}
       </Card>

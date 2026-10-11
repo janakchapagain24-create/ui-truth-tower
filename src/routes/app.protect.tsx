@@ -1,5 +1,6 @@
 import { DnsShield } from "@/components/oc/DnsShield";
 import { LaunchGuide } from "@/components/oc/LaunchGuide";
+import { BarrierGuide } from "@/components/oc/BarrierGuide";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ShieldCheck, Smartphone, Globe, Monitor, Apple } from "lucide-react";
@@ -68,12 +69,26 @@ function ProtectPage() {
           <p className="mb-4 text-sm text-muted-foreground">
             Status: {s.trustedPerson ? `${s.trustedPerson.name} · ${s.trustedPerson.status}` : "Not configured"}
           </p>
-          {!s.trustedPerson && (
-            <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); if (!tp.name) return; setState((x) => ({ ...x, trustedPerson: { ...tp, status: "pending" } })); }}>
+          {!s.trustedPerson ? (
+            <form className="space-y-2" onSubmit={(e) => { e.preventDefault(); if (!tp.name) return; setState((x) => ({ ...x, trustedPerson: { ...tp, status: "pending", share: { milestones: true, protectionChanges: true, checkIns: false } } })); }}>
               <input className="w-full rounded-2xl bg-muted px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="Name" value={tp.name} onChange={(e) => setTp({ ...tp, name: e.target.value })} />
-              <input className="w-full rounded-2xl bg-muted px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="Phone or email" value={tp.contact} onChange={(e) => setTp({ ...tp, contact: e.target.value })} />
+              <input className="w-full rounded-2xl bg-muted px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-ring" placeholder="Phone (for one-tap call/text) or email" value={tp.contact} onChange={(e) => setTp({ ...tp, contact: e.target.value })} />
               <Button type="submit" variant="solid" size="sm">Invite</Button>
             </form>
+          ) : (
+            <div className="space-y-3">
+              <p className="text-xs uppercase tracking-wider text-muted-foreground">What they can see — you choose</p>
+              {([["milestones", "Milestones I reach"], ["protectionChanges", "When I ask to turn protection off"], ["checkIns", "Weekly check-in (\"doing okay\")"]] as const).map(([k, label]) => {
+                const share = s.trustedPerson!.share ?? { milestones: true, protectionChanges: true, checkIns: false };
+                return (
+                  <label key={k} className="flex cursor-pointer items-center justify-between rounded-2xl bg-muted px-4 py-3 text-sm">{label}
+                    <input type="checkbox" className="size-4 accent-[var(--accent)]" checked={share[k]} onChange={(e) => setState((x) => ({ ...x, trustedPerson: x.trustedPerson && { ...x.trustedPerson, share: { ...share, [k]: e.target.checked } } }))} />
+                  </label>
+                );
+              })}
+              <p className="text-xs text-muted-foreground">Never shared: your setback notes, debts, chats with the coach or anything you write privately.</p>
+              <Button variant="ghost" size="sm" onClick={() => { if (confirm(`Remove ${s.trustedPerson!.name}'s access now?`)) setState((x) => ({ ...x, trustedPerson: undefined })); }}>Revoke access</Button>
+            </div>
           )}
         </Card>
 
@@ -104,6 +119,8 @@ function ProtectPage() {
         </form>
         {s.reports.length > 0 && <p className="mt-3 text-xs text-muted-foreground">{s.reports.length} site(s) reported. Thank you.</p>}
       </Card>
+
+      <BarrierGuide />
 
       <LaunchGuide />
 
