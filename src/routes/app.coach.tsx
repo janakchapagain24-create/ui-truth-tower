@@ -3,6 +3,7 @@ import { useRef, useState, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Send, Square, LifeBuoy } from "lucide-react";
 import { Card, PageHeader, Chip } from "@/components/oc/ui";
+import { CareDrawerButton } from "@/components/oc/CareResources";
 import { useExtra, coachRemaining, useCoachMessage } from "@/lib/store";
 
 export const Route = createFileRoute("/app/coach")({
@@ -52,8 +53,9 @@ function Coach() {
   return (
     <div className="space-y-5">
       <PageHeader eyebrow="One Chance AI" title="Private. Practical. On your side." />
-      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-        <LifeBuoy className="size-3.5" /> {left} of 10 free messages left today · In danger? Call local emergency services.
+      <CareDrawerButton />
+      <div className="flex items-start gap-2 rounded-2xl bg-muted px-4 py-3 text-xs text-muted-foreground">
+        <LifeBuoy className="mt-0.5 size-3.5 shrink-0" /> <span>One Chance AI is a supportive companion — not a therapist, doctor or crisis service. In danger? Call local emergency services. · {left} of 10 free messages left today</span>
       </div>
       <Card className="space-y-4">
         {msgs.map((m, i) => (

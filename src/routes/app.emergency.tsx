@@ -48,15 +48,28 @@ function Emergency() {
     <Button variant="solid" size="lg" className="mx-auto mt-10" disabled={!trigger} onClick={() => setStep(2)}>Next</Button>
   </>);
 
-  if (step === 2) return wrap(<>
-    <h1 className="text-3xl font-semibold">What would help right now?</h1>
-    <div className="mt-8 grid gap-3">
-      <Link to="/app/coach" className={pill({ variant: "glass", size: "lg" })}>Talk to AI</Link>
-      <button className={pill({ variant: "glass", size: "lg" })} onClick={() => alert(s.trustedPerson ? `Reach out to ${s.trustedPerson.name}: ${s.trustedPerson.contact}` : "Add a trusted person on the Protect page.")}>Contact my person</button>
-      <Button variant="accent" size="lg" onClick={() => setStep(3)}>20-minute emergency mission</Button>
-      <Link to="/" className={pill({ variant: "ghost", size: "lg" })}>Leave the app</Link>
-    </div>
-  </>);
+  if (step === 2) {
+    const tp = s.trustedPerson;
+    const msg = encodeURIComponent("Hey, I'm having an urge right now and could use 5 minutes of your time. Can we talk?");
+    const num = tp?.contact.replace(/[^\d+]/g, "") ?? "";
+    const isPhone = num.length >= 6 && !tp?.contact.includes("@");
+    return wrap(<>
+      <h1 className="text-3xl font-semibold">Reach a real person</h1>
+      <p className="mt-2 text-sm text-muted-foreground">Put the phone down from the gambling site first. Then tap one.</p>
+      <div className="mt-6 grid gap-3">
+        {tp ? (isPhone ? <>
+          <a href={`tel:${num}`} className={pill({ variant: "solid", size: "lg" })}>Call {tp.name}</a>
+          <a href={`sms:${num}?&body=${msg}`} className={pill({ variant: "glass", size: "lg" })}>Text {tp.name}</a>
+          <a href={`https://wa.me/${num.replace("+", "")}?text=${msg}`} target="_blank" rel="noreferrer" className={pill({ variant: "glass", size: "lg" })}>WhatsApp {tp.name}</a>
+        </> : <a href={`mailto:${tp.contact}?subject=Can%20we%20talk%3F&body=${msg}`} className={pill({ variant: "solid", size: "lg" })}>Email {tp.name}</a>)
+          : <Link to="/app/protect" className={pill({ variant: "glass", size: "lg" })}>Add a trusted person</Link>}
+        <a href="tel:18004262537" className={pill({ variant: "glass", size: "lg" })}>Call a free helpline (US 1-800-GAMBLER)</a>
+        <a href="tel:08088020133" className={pill({ variant: "glass", size: "lg" })}>Call a free helpline (UK GamCare)</a>
+        <Button variant="accent" size="lg" onClick={() => setStep(3)}>20-minute emergency mission</Button>
+        <Link to="/app/coach" className={pill({ variant: "ghost", size: "lg" })}>Talk to AI (not a crisis service)</Link>
+      </div>
+    </>);
+  }
 
   if (step === 3) {
     const mm = String(Math.floor(secs / 60)).padStart(2, "0"), ss = String(secs % 60).padStart(2, "0");
