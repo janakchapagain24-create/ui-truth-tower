@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlockedRouteImport } from './routes/blocked'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as ApiCoachRouteImport } from './routes/api/coach'
 import { Route as ApiDocsAiRouteImport } from './routes/api/docs-ai'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -45,6 +46,11 @@ const AuthRoute = AuthRouteImport.update({
 const BlockedRoute = BlockedRouteImport.update({
   id: '/blocked',
   path: '/blocked',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCoachRoute = ApiCoachRouteImport.update({
@@ -118,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
   '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
@@ -136,6 +143,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
   '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
@@ -156,6 +164,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
   '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
@@ -177,6 +186,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
     | '/api/docs-ai'
     | '/app/coach'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
     | '/api/docs-ai'
     | '/app/coach'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
     | '/api/docs-ai'
     | '/app/coach'
@@ -234,6 +246,7 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
   BlockedRoute: typeof BlockedRoute
+  DocsRoute: typeof DocsRoute
   ApiCoachRoute: typeof ApiCoachRoute
   ApiDocsAiRoute: typeof ApiDocsAiRoute
 }
@@ -266,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/blocked'
       fullPath: '/blocked'
       preLoaderRoute: typeof BlockedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/coach': {
@@ -397,6 +417,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
   BlockedRoute: BlockedRoute,
+  DocsRoute: DocsRoute,
   ApiCoachRoute: ApiCoachRoute,
   ApiDocsAiRoute: ApiDocsAiRoute,
 }

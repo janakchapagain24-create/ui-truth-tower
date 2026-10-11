@@ -1,5 +1,5 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import { Home, Shield, Target, Hammer, Briefcase, MessageCircle, Users, TrendingUp, Siren, Gamepad2, Lock } from "lucide-react";
+import { Home, Shield, Target, Hammer, Briefcase, MessageCircle, Users, TrendingUp, Siren, Gamepad2, Lock, FileText } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "./ThemeToggle";
 import { AccountButton } from "./AccountButton";
@@ -15,6 +15,7 @@ const NAV = [
   { to: "/app/games", label: "Games", icon: Gamepad2 },
   { to: "/app/vault", label: "Vault", icon: Lock },
   { to: "/app/progress", label: "Progress", icon: TrendingUp },
+  { to: "/docs", label: "Docs", icon: FileText },
 ] as const;
 
 const MOBILE = ["/app", "/app/missions", "/app/games", "/app/community", "/app/coach"];
