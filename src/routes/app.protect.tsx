@@ -1,4 +1,5 @@
 import { DnsShield } from "@/components/oc/DnsShield";
+import { LaunchGuide } from "@/components/oc/LaunchGuide";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ShieldCheck, Smartphone, Globe, Monitor, Apple } from "lucide-react";
@@ -103,6 +104,8 @@ function ProtectPage() {
         </form>
         {s.reports.length > 0 && <p className="mt-3 text-xs text-muted-foreground">{s.reports.length} site(s) reported. Thank you.</p>}
       </Card>
+
+      <LaunchGuide />
 
       <DnsShield />
 
