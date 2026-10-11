@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { payoffPlan } from "@/lib/debt";
+import { payoffPlan, installmentSchedule } from "@/lib/debt";
 
 const debts = [
   { name: "Card", balance: 1000, rate: 24, min: 30 },
@@ -20,7 +20,6 @@ describe("debt organizer", () => {
   });
 });
 
-import { installmentSchedule } from "@/lib/debt";
 describe("installmentSchedule", () => {
   it("pays 1000 at 0% with 250/month in 4 dated installments", () => {
     const rows = installmentSchedule([{ name: "A", balance: 1000, rate: 0, min: 50 }], 250, "snowball", new Date(2026, 0, 15));
