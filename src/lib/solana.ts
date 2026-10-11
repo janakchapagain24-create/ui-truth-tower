@@ -1,4 +1,9 @@
 // Browser-only Solana helpers. Import dynamically from event handlers.
+// Loaded from a CDN in the browser only, so the server bundle never includes it.
+const WEB3_URL = "https://esm.sh/@solana/web3.js@1.98.4?bundle";
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const web3 = (): Promise<any> => import(/* @vite-ignore */ WEB3_URL);
+
 export const CLUSTER = "devnet";
 export const RPC = "https://api.devnet.solana.com";
 export const MEMO_PROGRAM = "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr";
@@ -18,13 +23,13 @@ export function getProvider(): Provider | null {
 export const explorer = (sig: string) => `https://explorer.solana.com/tx/${sig}?cluster=${CLUSTER}`;
 
 export async function getBalance(addr: string) {
-  const { Connection, PublicKey, LAMPORTS_PER_SOL } = await import("@solana/web3.js");
+  const { Connection, PublicKey, LAMPORTS_PER_SOL } = await web3();
   const c = new Connection(RPC, "confirmed");
   return (await c.getBalance(new PublicKey(addr))) / LAMPORTS_PER_SOL;
 }
 
 export async function airdrop(addr: string) {
-  const { Connection, PublicKey, LAMPORTS_PER_SOL } = await import("@solana/web3.js");
+  const { Connection, PublicKey, LAMPORTS_PER_SOL } = await web3();
   const c = new Connection(RPC, "confirmed");
   const sig = await c.requestAirdrop(new PublicKey(addr), LAMPORTS_PER_SOL);
   await c.confirmTransaction(sig, "confirmed");
@@ -33,7 +38,7 @@ export async function airdrop(addr: string) {
 
 /** Record a commitment on-chain as a memo; optional stake is sent to the trusted person, who returns it at the milestone. */
 export async function pledge(addr: string, days: number, sol: number, partner: string) {
-  const { Connection, PublicKey, Transaction, TransactionInstruction, SystemProgram, LAMPORTS_PER_SOL } = await import("@solana/web3.js");
+  const { Connection, PublicKey, Transaction, TransactionInstruction, SystemProgram, LAMPORTS_PER_SOL } = await web3();
   const p = getProvider(); if (!p) throw new Error("No Solana wallet found");
   const c = new Connection(RPC, "confirmed");
   const from = new PublicKey(addr);
@@ -42,7 +47,7 @@ export async function pledge(addr: string, days: number, sol: number, partner: s
   if (sol > 0 && partner) {
     tx.add(SystemProgram.transfer({ fromPubkey: from, toPubkey: new PublicKey(partner), lamports: Math.round(sol * LAMPORTS_PER_SOL) }));
   }
-  tx.add(new TransactionInstruction({ keys: [{ pubkey: from, isSigner: true, isWritable: false }], programId: new PublicKey(MEMO_PROGRAM), data: new TextEncoder().encode(memo) as unknown as Buffer }));
+  tx.add(new TransactionInstruction({ keys: [{ pubkey: from, isSigner: true, isWritable: false }], programId: new PublicKey(MEMO_PROGRAM), data: new TextEncoder().encode(memo) }));
   tx.feePayer = from;
   tx.recentBlockhash = (await c.getLatestBlockhash()).blockhash;
   const { signature } = await p.signAndSendTransaction(tx);
