@@ -188,7 +188,8 @@ Blink: Solana Action URL → cheer() / grant()
     </ol>
   </> },
   { id: "checklist", group: "Colosseum", title: "Submission checklist", body: <>
-    <Box><ul className="space-y-2">{CHECK.map(([t, ok]) => <li key={t} className="flex items-center gap-2 text-sm">{ok ? <Check className="size-4 text-primary" /> : <Circle className="size-4 text-muted-foreground" />}{t}</li>)}</ul></Box>
+    <Box><ul className="space-y-3">{CHECK.map((c) => <li key={c.t} className="flex items-start gap-2 text-sm"><span className="mt-0.5 shrink-0">{c.ok ? <Check className="size-4 text-primary" /> : <Circle className="size-4 text-muted-foreground" />}</span><span><span>{c.t}</span>{c.url && <a href={c.url} target="_blank" rel="noreferrer" className="ml-1.5 inline-flex items-center gap-0.5 text-xs text-primary underline">Guide <ExternalLink className="size-3" /></a>}{c.note && <span className="block text-xs text-muted-foreground">{c.note}</span>}</span></li>)}</ul></Box>
+    <Callout kind="tip">Two items are yours to finish: <strong>publish the code to GitHub</strong> (connect the project with two-way Git sync, then make the repository public) and <strong>record the 3-minute pitch video</strong>. Once both are live, share the repo URL and video link and they'll be wired directly into this checklist as clickable links for judges.</Callout>
     <a href="https://arena.colosseum.org" target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-sm text-primary">Colosseum Arena <ExternalLink className="size-3.5" /></a>
   </> },
 ];
