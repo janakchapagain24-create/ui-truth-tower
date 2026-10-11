@@ -57,9 +57,13 @@ const ROADMAP: { phase: string; status: "done" | "next" | "later"; items: string
   { phase: "Phase 4 · Colosseum sprint", status: "next", items: ["Anchor escrow (time-lock + guardian co-sign)", "Soulbound milestone badges", "Solana Blinks for cheers & grants"] },
   { phase: "Phase 5 · Launch", status: "later", items: ["Native iOS & Android blockers", "USDC work payouts", "Weekly AI review, mainnet"] },
 ];
-const CHECK: [string, boolean][] = [
-  ["Working app deployed", true], ["Solana Devnet integration (wallet + memo tx)", true], ["Public GitHub repo", false],
-  ["3-minute pitch video", false], ["Technical demo video", false], ["Anchor escrow program on Devnet", false],
+const CHECK: { t: string; ok: boolean; url?: string; note?: string }[] = [
+  { t: "Working app deployed", ok: true },
+  { t: "Solana Devnet integration (wallet + memo tx)", ok: true },
+  { t: "Public GitHub repo", ok: false, url: "https://docs.lovable.dev/integrations/github", note: "Connect the project via Plus (+) menu → GitHub → Connect project (two-way sync), then flip the repository to public" },
+  { t: "3-minute pitch video", ok: false, note: "Suggested cut: problem 30s → product demo 90s → Solana escrow/badges/Blinks 45s → team & ask 15s" },
+  { t: "Technical demo video", ok: false },
+  { t: "Anchor escrow program on Devnet", ok: false },
 ];
 
 /* ---------- pages ---------- */
