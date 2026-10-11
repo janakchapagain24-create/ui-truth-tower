@@ -46,7 +46,7 @@ function Work() {
 
   async function claim(s: Sub) {
     const { error } = await supabase.from("work_submissions").update({ claimed: true }).eq("id", s.id);
-    if (error) return toast.error("Couldn't claim that reward.");
+    if (error) { toast.error("Could not claim that reward."); return; }
     setState((x) => ({ ...x, credits: x.credits + s.reward }));
     toast.success(`+${s.reward} credits. Real work, real progress.`);
     void load();
@@ -110,11 +110,11 @@ function SubmitForm({ job, onDone, onCancel }: { job: (typeof JOBS)[number]; onD
   const [busy, setBusy] = useState(false);
   async function send(e: React.FormEvent) {
     e.preventDefault();
-    if (url && !/^https?:\/\//.test(url)) return toast.error("Proof link must start with https://");
+    if (url && !url.startsWith("http")) { toast.error("Proof link must start with https://"); return; }
     setBusy(true);
     const { error } = await supabase.from("work_submissions").insert({ challenge_id: job.id, challenge_title: job.title, summary: summary.trim(), proof_url: url || null });
     setBusy(false);
-    if (error) return toast.error("Couldn't send. Write at least a couple of sentences.");
+    if (error) { toast.error("Could not send. Write at least a couple of sentences."); return; }
     toast.success("Sent for review. Nice work.");
     onDone();
   }
