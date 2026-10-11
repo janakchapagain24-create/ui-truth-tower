@@ -31,6 +31,19 @@ const Quote = ({ children }: { children: React.ReactNode }) => <blockquote class
 const Grid = ({ children }: { children: React.ReactNode }) => <div className="grid gap-3 md:grid-cols-2">{children}</div>;
 const Card = ({ t, d }: { t: string; d: string }) => <Box><p className="font-semibold">{t}</p><p className="mt-1 text-sm text-muted-foreground">{d}</p></Box>;
 
+const LANCET = "https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(24)00167-1/fulltext";
+const STATS = [
+  { v: "~US$700 billion", d: "Projected yearly losses by gamblers worldwide by 2028, driven by online and mobile gambling.", src: "The Lancet Public Health Commission, 2024", url: LANCET },
+  { v: "80 million adults", d: "Estimated number of adults worldwide with gambling disorder or problem gambling.", src: "JAMA, reporting the Lancet Commission, 2024", url: "https://jamanetwork.com/journals/jama/article-abstract/2827151" },
+  { v: "16% of adults", d: "Of people who use online casinos or slots may have a gambling disorder — 26% of teenagers who use them.", src: "JAMA / Lancet Commission, 2024", url: "https://jamanetwork.com/journals/jama/article-abstract/2827151" },
+  { v: "80%+ of countries", d: "Now allow gambling in some form, and online gambling reaches everywhere through the internet.", src: "The Lancet Public Health Commission, 2024", url: LANCET },
+];
+const STORIES = [
+  { name: "Danielle, 24", d: "Started with a £20 online bet. Then her student loan, overdraft and phone bill went on gambling — and then nearly £70,000 taken from work.", q: "\"It actually felt like a massive weight off my shoulders to admit it and accept that I needed help.\"", url: "https://www.bbc.com/news/newsbeat-56997362" },
+  { name: "Josh, 27", d: "Chased a £600 loss on his credit card until he owed £20,000–£25,000.", q: "\"I'm looking at eight to 10 years to pay this off.\"", url: "https://www.bbc.co.uk/news/newsbeat-51108036" },
+  { name: "Chris, 23", d: "Began with 20p bets at age 12. Opened accounts with every bookmaker at 18 to chase free bets, and ended up £25,000 in debt.", q: "\"It truly felt like my brain was rewired.\"", url: "https://www.bbc.co.uk/news/uk-england-bristol-68976786" },
+  { name: "John, 54", d: "Gambled for 46 years, borrowing from friends to keep going. He finally got help from an NHS gambling service.", q: "\"There was the deceit, the lies, the manipulation of friends to lend money for my addiction.\"", url: "https://www.bbc.com/news/articles/cq8d2qwx0wxo" },
+];
 const SHOTS = [
   ["home", "Social home", "Stories, cheers and daily wins."], ["protect", "Protect", "Shields, trusted person, DNS profiles."],
   ["emergency", "Emergency pause", "Breathe, name the trigger, wait 20 min."], ["vault", "Solana Vault", "Devnet commitment signed on-chain."],
@@ -59,10 +72,21 @@ const PAGES: Page[] = [
   </> },
   { id: "epidemic", group: "The story", title: "Gambling is everywhere now", body: <>
     <P>Ten years ago, betting meant going somewhere. Today it lives in the phone in your pocket — open at 2 a.m., in the bathroom at work, during your kid's football match. Sports betting has been legalised in more and more places, online casinos run nonstop, and new prediction markets and crypto casinos turn almost anything into a bet.</P>
+    <H>The numbers</H>
+    <div className="grid gap-3 sm:grid-cols-2">
+      {STATS.map((s) => <a key={s.v} href={s.url} target="_blank" rel="noreferrer" className="glass block rounded-2xl p-4 transition hover:shadow-glow"><p className="font-display text-2xl font-bold text-gradient">{s.v}</p><p className="mt-1 text-sm">{s.d}</p><p className="mt-2 text-xs text-muted-foreground underline">Source: {s.src}</p></a>)}
+    </div>
     <P>Every app is designed to bring you back: push notifications, "free bets", boosted odds, celebrity ads, live in-play markets that let you bet again every few seconds. Advertising during sport has become constant, and young adults are growing up thinking a bet slip is part of watching the game.</P>
     <Callout kind="warn">Gambling harm is not just about money. It's linked to debt, broken relationships, lost jobs, anxiety, depression and — for some — thoughts of suicide. Most people suffering never ask for help, because of shame.</Callout>
     <H>Why the old tools fail</H>
     <Grid><Card t="Willpower runs out" d="Urges peak late at night, after drinking, after a loss. That's exactly when promises break." /><Card t="Blockers are one tap from off" d="Most can be uninstalled or disabled in under a minute during an urge." /><Card t="Recovery is lonely" d="Shame keeps people quiet. Without anyone noticing, a slip becomes a spiral." /><Card t="Debt keeps you stuck" d="The chase begins: 'one more win and I can fix it'. The debt grows instead." /></Grid>
+  </> },
+  { id: "real", group: "The story", title: "Real people, real debt", body: <>
+    <P>These are public stories that people chose to share with the BBC. Each one follows the same path: a small bet, then chasing losses, then gambling with money that wasn't theirs to lose.</P>
+    <div className="space-y-3">
+      {STORIES.map((s) => <div key={s.name} className="glass rounded-2xl p-4"><p className="font-semibold">{s.name}</p><p className="mt-1 text-sm text-muted-foreground">{s.d}</p><Quote>{s.q}</Quote><a href={s.url} target="_blank" rel="noreferrer" className="text-xs text-primary underline">Read the full story on BBC News</a></div>)}
+    </div>
+    <Callout kind="warn">The pattern is always the same: the money runs out, so people use student loans, overdrafts, credit cards, money borrowed from friends — and sometimes money from work. The debt then becomes the reason to keep gambling.</Callout>
   </> },
   { id: "spiral", group: "The story", title: "Marcus: the 2 a.m. spiral", body: <>
     <Callout>Marcus is a composite character, built from the common patterns people describe in recovery. His story is realistic, not a real person.</Callout>
@@ -91,6 +115,26 @@ const PAGES: Page[] = [
     <P>His commitment completes. His stake comes back. He keeps the shields on, by choice. Nights are for sleep again.</P>
     <Quote>"I didn't get one chance. I got one more chance. That's all I needed."</Quote>
     <Callout kind="warn">One Chance can't promise anyone will never gamble again. It makes the next safe day easier — and makes starting again always possible. If you're in crisis, please contact a local helpline or emergency services.</Callout>
+  </> },
+  { id: "why", group: "Product", title: "Why One Chance", body: <>
+    <P>Every story above breaks at the same three moments: the urge at night, the money gap, and the silence. Most tools only cover one. One Chance covers all three in one free app.</P>
+    <Grid>
+      <Card t="Walls that hold at 2 a.m." d="Blocking plus a 48-hour wait and a trusted person who is told. A two-minute urge can't undo a month of decisions." />
+      <Card t="A plan for the debt" d="A debt planner with a month-by-month schedule, so 'one big win' stops looking like the only way out." />
+      <Card t="A promise others can see" d="A Solana commitment with an optional stake and a guardian — accountability that can't be quietly deleted." />
+      <Card t="Never alone" d="An emergency pause, an AI coach, and a community that cheers safe days. Slips are logged privately and never erase progress." />
+    </Grid>
+    <Callout kind="tip">Free forever: protection, missions and the emergency pause never switch off, whatever your credits or payment status.</Callout>
+  </> },
+  { id: "work", group: "Product", title: "Work marketplace", body: <>
+    <P>Yes — it's live. Blocking gambling leaves two holes: empty time and a money problem. The Work page fills both with small, honest tasks.</P>
+    <Grid>
+      <Card t="1. Pick a challenge" d="Short skill-building tasks members can start right away." />
+      <Card t="2. Submit proof" d="A short write-up and an optional link to the finished work." />
+      <Card t="3. Get verified" d="A reviewer approves it or asks for changes. Members can't approve their own work." />
+      <Card t="4. Claim the reward" d="Approved work earns 50 credits, claimed once. Real cash payouts are on the roadmap." />
+    </Grid>
+    <Callout>Employers never see anyone's recovery data. Work is judged on the work alone.</Callout>
   </> },
   { id: "tour", group: "Product", title: "Product tour", body: <>
     <P>Every screen below is live in the app today.</P>
