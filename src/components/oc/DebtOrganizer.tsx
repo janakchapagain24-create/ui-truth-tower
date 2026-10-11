@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { Card, Button, Chip, Eyebrow } from "./ui";
 import { useExtra, setExtra } from "@/lib/store";
-import { payoffPlan } from "@/lib/debt";
+import { payoffPlan, installmentSchedule } from "@/lib/debt";
 
 const inp = "rounded-2xl bg-muted px-3 py-2.5 text-sm outline-none focus:ring-2 focus:ring-ring";
 
@@ -13,6 +13,11 @@ export function DebtOrganizer() {
   const [strategy, setStrategy] = useState<"snowball" | "avalanche">("snowball");
   const plan = payoffPlan(x.debts, Number(budget) || 0, strategy);
   const other = payoffPlan(x.debts, Number(budget) || 0, strategy === "snowball" ? "avalanche" : "snowball");
+  const [day, setDay] = useState(1);
+  const [showAll, setShowAll] = useState(false);
+  const now = new Date();
+  const start = new Date(now.getFullYear(), now.getMonth() + (now.getDate() > day ? 1 : 0), day);
+  const rows = installmentSchedule(x.debts, Number(budget) || 0, strategy, start);
   const total = x.debts.reduce((s, d) => s + d.balance, 0);
 
   function add(e: React.FormEvent) {
@@ -61,7 +66,38 @@ export function DebtOrganizer() {
           <div className="rounded-2xl bg-muted p-4"><Eyebrow>Pay off order</Eyebrow><p className="mt-1 text-sm">{plan.order.join(" → ")}</p></div>
           <p className="text-xs text-muted-foreground sm:col-span-3">Total owed {total.toLocaleString()}. Estimates only — talk to a free debt advice service before big decisions.</p>
         </div>
-      ) : <p className="text-sm text-destructive">Budget is below your minimum payments. A free debt advice service can help negotiate.</p>)}
+      ) : null)}
+      {x.debts.length > 0 && rows.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-semibold">Scheduled installments</h3>
+            <span className="ml-auto text-sm text-muted-foreground">Due day</span>
+            {[1, 15, 28].map((d) => <Chip key={d} active={day === d} onClick={() => setDay(d)}>{d}</Chip>)}
+          </div>
+          <div className="overflow-x-auto rounded-2xl bg-muted">
+            <table className="w-full text-left text-xs">
+              <thead className="text-muted-foreground"><tr><th className="p-2">#</th><th className="p-2">Due</th><th className="p-2">Pay</th><th className="p-2">Principal</th><th className="p-2">Interest</th><th className="p-2">Left</th></tr></thead>
+              <tbody>
+                {(showAll ? rows : rows.slice(0, 12)).map((r) => (
+                  <tr key={r.month} className="border-t border-border">
+                    <td className="p-2">{r.month}</td>
+                    <td className="p-2 whitespace-nowrap">{new Date(r.date + "T00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "2-digit" })}</td>
+                    <td className="p-2">{r.payment.toLocaleString()}</td>
+                    <td className="p-2">{r.principal.toLocaleString()}</td>
+                    <td className="p-2">{r.interest.toLocaleString()}</td>
+                    <td className="p-2">{r.remaining.toLocaleString()}{r.paidOff.length > 0 && <span className="ml-1 text-primary">✓ {r.paidOff.join(", ")} paid off</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="flex gap-2">
+            {rows.length > 12 && <Button size="sm" onClick={() => setShowAll(!showAll)}>{showAll ? "Show less" : `Show all ${rows.length} months`}</Button>}
+            <Button size="sm" onClick={() => { navigator.clipboard?.writeText(rows.map((r) => `${r.date}  pay ${r.payment}  left ${r.remaining}`).join("\n")); }}>Copy schedule</Button>
+          </div>
+        </div>
+      )}
+      {x.debts.length > 0 && !plan.feasible && (<p className="text-sm text-destructive">Budget is below your minimum payments. A free debt advice service can help negotiate.</p>)}
     </Card>
   );
 }
