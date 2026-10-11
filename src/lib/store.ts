@@ -10,7 +10,7 @@ export type State = {
   credits: number;
   mood?: { value: Mood; date: string };
   categories: Record<string, boolean>;
-  trustedPerson?: { name: string; contact: string; status: "pending" | "connected"; share?: { milestones: boolean; protectionChanges: boolean; checkIns: boolean } };
+  trustedPerson?: { name: string; contact: string; status: "pending" | "connected"; share?: { milestones: boolean; protectionChanges: boolean; checkIns: boolean } } | undefined;
   setbacks: { date: string; kind: string }[];
   goal: string;
   skills: string[];
