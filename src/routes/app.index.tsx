@@ -3,6 +3,8 @@ import { useRef, useState } from "react";
 import { ShieldCheck, Heart, MessageCircle, Send, Bookmark, Plus, X, Gamepad2, Check, Siren } from "lucide-react";
 import { Card, Chip, Button, DemoNote } from "@/components/oc/ui";
 import { MISSIONS } from "@/lib/missions";
+import { useAuth } from "@/hooks/useAuth";
+import { useFeed } from "@/lib/feed";
 import { useStore, protectionDay, completeMission, isDoneToday, setState, levelOf, type Mood } from "@/lib/store";
 
 export const Route = createFileRoute("/app/")({
@@ -28,7 +30,7 @@ const STORIES = [
   { who: "Mia", note: "Urge hit at 11pm. Played Tetris instead. Still here." },
 ];
 
-type Post = { id: number; who: string; time: string; tag: string; text: string; badge?: string; cheers: number; comments: string[] };
+type Post = { id: number | string; mine?: boolean; who: string; time: string; tag: string; text: string; badge?: string; cheers: number; comments: string[] };
 const SEED: Post[] = [
   { id: 1, who: "Sam", time: "2h", tag: "#Day40", badge: "40 days protected", text: "Finished my first logo for a real client today. Small, but real.", cheers: 124, comments: ["Ana: So proud of you!", "Leo: Keep going 🔥"] },
   { id: 2, who: "Ana", time: "5h", tag: "#MorningWalk", text: "Week three of walking every morning. My head is clearer and the urges are quieter.", cheers: 86, comments: ["Mia: Needed this today."] },
@@ -47,13 +49,15 @@ function HomePage() {
   const s = useStore();
   const lvl = levelOf(s.credits);
   const [posts, setPosts] = useState(SEED);
-  const [liked, setLiked] = useState<number[]>([]);
+  const [liked, setLiked] = useState<(number | string)[]>([]);
+  const { user } = useAuth();
+  const feed = useFeed(user?.id ?? null);
   const [story, setStory] = useState<number | null>(null);
   const [compose, setCompose] = useState(false);
   const mood = s.mood?.date === new Date().toISOString().slice(0, 10) ? s.mood.value : undefined;
   const todays = MISSIONS.slice(0, 4);
 
-  const like = (id: number, only = false) =>
+  const like = (id: number | string, only = false) =>
     setLiked((l) => (l.includes(id) ? (only ? l : l.filter((x) => x !== id)) : [...l, id]));
 
   return (
@@ -122,10 +126,21 @@ function HomePage() {
         </div>
       </div>
 
-      <DemoNote>Sample community posts. Real profiles and sharing arrive with accounts.</DemoNote>
-
-      {/* Feed */}
-      {posts.map((p) => <PostCard key={p.id} p={p} liked={liked.includes(p.id)} onLike={(only) => like(p.id, only)} />)}
+      {user ? (
+        <>
+          {feed.posts.length === 0 && <Card className="p-5 text-center text-sm text-muted-foreground">No wins shared yet. Be the first — tap + below.</Card>}
+          {feed.posts.map((p) => (
+            <PostCard key={p.id} p={{ ...p, cheers: p.cheers - (p.cheered ? 1 : 0) }} liked={p.cheered}
+              onLike={(only) => { if (only && p.cheered) return; void feed.cheer(p.id, !p.cheered); }}
+              onComment={(t) => void feed.comment(p.id, t)} onDelete={p.mine ? () => void feed.remove(p.id) : undefined} />
+          ))}
+        </>
+      ) : (
+        <>
+          <DemoNote>Sample posts. <Link to="/auth" className="underline">Sign in</Link> to share wins, cheer and comment with real members.</DemoNote>
+          {posts.map((p) => <PostCard key={p.id} p={p} liked={liked.includes(p.id)} onLike={(only) => like(p.id, only)} />)}
+        </>
+      )}
 
       {/* FAB */}
       <button onClick={() => setCompose(true)} aria-label="Share a win"
@@ -134,13 +149,14 @@ function HomePage() {
       </button>
 
       {story !== null && <StoryViewer i={story} onClose={() => setStory(null)} onNext={() => setStory(story + 1 < STORIES.length ? story + 1 : null)} />}
-      {compose && <Composer onClose={() => setCompose(false)} onPost={(text) => { setPosts([{ id: Date.now(), who: "You", time: "now", tag: "#MyWin", text, cheers: 0, comments: [] }, ...posts]); setCompose(false); }} />}
+      {compose && <Composer onClose={() => setCompose(false)} onPost={(text) => { if (user) { void feed.post(text); setCompose(false); return; } setPosts([{ id: Date.now(), who: "You", time: "now", tag: "#MyWin", text, cheers: 0, comments: [] }, ...posts]); setCompose(false); }} />}
     </div>
   );
 }
 
-function PostCard({ p, liked, onLike }: { p: Post; liked: boolean; onLike: (only: boolean) => void }) {
+function PostCard({ p, liked, onLike, onComment, onDelete }: { p: Post; liked: boolean; onLike: (only: boolean) => void; onComment?: (t: string) => void; onDelete?: () => void }) {
   const [burst, setBurst] = useState(0);
+  const [draft, setDraft] = useState("");
   const [showComments, setShowComments] = useState(false);
   const last = useRef(0);
   const tap = () => {
@@ -153,6 +169,7 @@ function PostCard({ p, liked, onLike }: { p: Post; liked: boolean; onLike: (only
       <div className="flex items-center gap-3 p-4">
         <Avatar name={p.who} />
         <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold">{p.who}</p><p className="text-xs text-muted-foreground">{p.time}</p></div>
+        {onDelete && <button aria-label="Delete post" onClick={onDelete} className="text-muted-foreground"><X className="size-4" /></button>}
       </div>
       <div onClick={tap} className="relative grid aspect-square cursor-pointer select-none place-items-center p-8 text-center"
         style={{ background: `linear-gradient(135deg, ${hue(p.who)}, color-mix(in oklab, ${hue(p.who)} 40%, var(--background)))` }}>
@@ -176,7 +193,13 @@ function PostCard({ p, liked, onLike }: { p: Post; liked: boolean; onLike: (only
             {showComments ? "Hide comments" : `View all ${p.comments.length} comments`}
           </button>
         )}
-        {showComments && <ul className="mt-2 space-y-1 text-sm">{p.comments.map((c) => <li key={c}>{c}</li>)}</ul>}
+        {showComments && <ul className="mt-2 space-y-1 text-sm">{p.comments.map((c, i) => <li key={i}>{c}</li>)}</ul>}
+        {onComment && (showComments || p.comments.length === 0) && (
+          <form className="mt-3 flex gap-2" onSubmit={(e) => { e.preventDefault(); if (draft.trim()) { onComment(draft.trim().slice(0, 500)); setDraft(""); setShowComments(true); } }}>
+            <input value={draft} onChange={(e) => setDraft(e.target.value)} placeholder="Add a kind word…" className="flex-1 rounded-full bg-muted px-4 py-2 text-sm outline-none" />
+            <Button type="submit" size="sm" variant="solid" disabled={!draft.trim()}>Post</Button>
+          </form>
+        )}
       </div>
     </Card>
   );
