@@ -154,7 +154,7 @@ function HomePage() {
   );
 }
 
-function PostCard({ p, liked, onLike, onComment, onDelete }: { p: Post; liked: boolean; onLike: (only: boolean) => void; onComment?: (t: string) => void; onDelete?: () => void }) {
+function PostCard({ p, liked, onLike, onComment, onDelete }: { p: Post; liked: boolean; onLike: (only: boolean) => void; onComment?: (t: string) => void; onDelete?: (() => void) | undefined }) {
   const [burst, setBurst] = useState(0);
   const [draft, setDraft] = useState("");
   const [showComments, setShowComments] = useState(false);
