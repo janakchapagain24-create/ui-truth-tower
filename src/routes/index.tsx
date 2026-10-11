@@ -6,6 +6,8 @@ import {
   ShieldCheck, Siren, Flame, Wallet, Sparkles, ChevronDown,
 } from "lucide-react";
 import { Logo } from "@/components/oc/Logo";
+import { ThemeToggle } from "@/components/oc/ThemeToggle";
+import { InstallHint } from "@/components/oc/InstallHint";
 import { pill, Card, Eyebrow } from "@/components/oc/ui";
 
 export const Route = createFileRoute("/")({
@@ -182,13 +184,29 @@ function Landing() {
 
   return (
     <div className="min-h-screen">
+      <motion.div
+        initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}
+        className="flex justify-center px-4 pt-4"
+      >
+        <a href="/docs#solana" className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-muted-foreground transition hover:text-foreground">
+          <span className="size-1.5 rounded-full bg-primary animate-pulse" />
+          Built on Solana for the Colosseum Hackathon
+          <span className="font-semibold text-foreground">View architecture →</span>
+        </a>
+      </motion.div>
       <motion.header
-        className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6"
+        className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 py-5"
         initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, ease }}
       >
         <Logo />
-        <Link to="/app" className={pill({ variant: "solid", size: "sm" })}>Open app</Link>
+        <nav className="flex items-center gap-1 sm:gap-2">
+          <Link to="/docs" className="rounded-full px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground">Docs</Link>
+          <Link to="/app/vault" className="hidden rounded-full px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground sm:inline">Vault</Link>
+          <ThemeToggle />
+          <Link to="/app" className={pill({ variant: "solid", size: "sm" })}>Open app</Link>
+        </nav>
       </motion.header>
+      <InstallHint />
 
       {/* Hero */}
       <section ref={heroRef} className="relative mx-auto max-w-6xl px-6 pb-16 pt-14 md:pt-20">
