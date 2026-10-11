@@ -22,3 +22,15 @@
 - [ ] Accounts + shared community/work data — needs Lovable Cloud enabled
 - [ ] Custom Solana escrow program (Anchor) — needs a Rust toolchain/deploy outside Lovable
 - [ ] Work payouts — needs a payment provider decision
+
+## Phase 3 (done)
+- [x] Accounts (email + Google), progress/debts synced to account
+- [x] Shared feed: real posts, cheers, comments (live)
+- [x] Work: submit proof → reviewer verifies → claim credits
+- [x] Early-access list saved to the cloud
+
+## Open
+- [ ] Native iPhone/Android blocker apps — need Swift/Kotlin projects + Apple/Google developer accounts (outside Lovable)
+- [ ] Email notifications to early-access list — needs an email sending domain
+- [ ] Real cash payouts for work — needs payment provider decision
+- [ ] Assign first reviewer (admin role)
