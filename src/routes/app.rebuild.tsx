@@ -12,6 +12,15 @@ export const Route = createFileRoute("/app/rebuild")({
 
 const RESOURCES = ["Phone", "Laptop", "Internet", "Time", "Car", "Tools", "Quiet space"];
 const PATH = ["Skill", "Service", "Portfolio", "Outreach", "First client", "Repeat clients", "Business"];
+const FOCUS = [
+  "Pick one skill and practise it for 30 minutes a day this week.",
+  "Write one sentence: who you help, and with what.",
+  "Make 2–3 small samples that show what you can do.",
+  "Message 5 people you know about your service.",
+  "Do your first job well — on time, as promised.",
+  "Ask happy clients for a review or another job.",
+  "Set simple prices and keep track of what comes in and goes out.",
+];
 const PLANS: [string, string[]][] = [
   ["30-day plan", ["Week 1: protection + routine", "Week 2: practice your top skill daily", "Week 3: write one clear service offer", "Week 4: reach out to 5 people"]],
   ["90-day plan", ["Month 1: steady footing", "Month 2: build a small portfolio", "Month 3: find a first paying client"]],
@@ -78,7 +87,17 @@ function Rebuild() {
             );
           })}
         </ol>
-        <p className="mt-4 text-sm text-muted-foreground">Step {stage + 1} of {PATH.length}: <span className="text-foreground">{PATH[stage]}</span></p>
+        <div key={stage} className="glass mt-6 rounded-3xl p-5 fade-up">
+          <p className="text-xs uppercase tracking-wider text-muted-foreground">Your focus now · Step {stage + 1} of {PATH.length}</p>
+          <p className="mt-1 text-lg font-semibold">{PATH[stage]}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{FOCUS[stage]}</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {stage < PATH.length - 1 ? (
+              <Chip active onClick={() => setExtra((e) => ({ ...e, pathStage: stage + 1 }))}><Check className="size-4" /> Done — next: {PATH[stage + 1]}</Chip>
+            ) : <span className="text-sm font-medium">You've reached the last step. Keep it steady.</span>}
+            {stage > 0 && <Chip onClick={() => setExtra((e) => ({ ...e, pathStage: stage - 1 }))}>Back</Chip>}
+          </div>
+        </div>
       </Card>
 
       <DebtOrganizer />
