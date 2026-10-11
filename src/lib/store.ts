@@ -140,3 +140,16 @@ export function coachRemaining(x: Extra, day = today()) {
 export function useCoachMessage(day = today()) {
   setExtra((x) => ({ ...x, coach: { date: day, count: x.coach.date === day ? x.coach.count + 1 : 1 } }));
 }
+
+// ---- Cloud sync hooks ----
+export const getSnapshot = () => { load(); xLoad(); return { state, extra: xs }; };
+export function replaceAll(s: Partial<State>, e: Partial<Extra>) {
+  load(); xLoad();
+  state = { ...initial, ...s }; xs = { ...xInitial, ...e };
+  localStorage.setItem(KEY, JSON.stringify(state)); localStorage.setItem(XKEY, JSON.stringify(xs));
+  listeners.forEach((l) => l()); xListeners.forEach((l) => l());
+}
+export function subscribeAll(fn: () => void) {
+  listeners.add(fn); xListeners.add(fn);
+  return () => { listeners.delete(fn); xListeners.delete(fn); };
+}
