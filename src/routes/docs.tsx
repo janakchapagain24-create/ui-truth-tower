@@ -157,7 +157,25 @@ Next (Anchor):
 Vault PDA [user, start, days, guardian]
    ├─ unlock()  after milestone date  → back to user
    └─ release() guardian co-sign       → partner / charity`}</pre></Box>
-    <Grid><Card t="Live now" d="Devnet wallet connect, test airdrop, signed commitments, explorer links." /><Card t="Soulbound badges" d="Compressed NFTs for Day 30/90/180 — proof without revealing identity." /><Card t="Blinks" d="Share a win on X; friends cheer or send a small grant." /><Card t="Privacy" d="No addiction status on-chain — only a commitment memo." /></Grid>
+    <H>Deep dive: Phase 4 Web3 specs</H>
+    <Box className="font-mono text-xs leading-relaxed md:text-sm"><pre className="overflow-x-auto whitespace-pre">{`Anchor program "vault"
+  initialize(user, start_ts, days, guardian, stake)
+      stake ──► Vault PDA [user, start_ts, days, guardian]
+  unlock()   user signs after start_ts + days  → stake back to user
+  release()  guardian co-signs                 → stake to recipient
+  (time-lock enforced on-chain — no client can spend early)
+
+Badge: Metaplex compressed NFT, minted at Day 30/90/180
+  transfer blocked (soulbound) · ownership provable, identity hidden
+
+Blink: Solana Action URL → cheer() / grant()
+  renders as a rich preview on X — friends act without installing`}</pre></Box>
+    <Grid>
+      <Card t="1 · Anchor escrow (time-lock + guardian co-sign)" d="A real Anchor program replaces the signed-memo commitment. The stake sits in a Program Derived Address derived from the user, start date, length and guardian — no one holds the keys. The funds only move two ways: unlock() after the milestone date returns them to the user, or release() with the guardian's co-signature sends them to a partner or charity. The 2 a.m. version of the user can't touch the money, and the app can't either — the chain enforces the wait." />
+      <Card t="2 · Soulbound milestone badges" d="Compressed NFTs (Metaplex Bubblegum) minted automatically at Day 30/90/180 of verified protection. Transfers are blocked, so a badge can't be bought or moved — it's on-chain proof that this wallet held a 30/90/180-day commitment to completion, without ever putting an addiction status or real name on-chain. Cheap to mint, verifiable by any wallet or dApp." />
+      <Card t="3 · Solana Blinks for cheers & grants" d="Solana Actions rendered as rich previews on X (and any Blink-compatible client). A member shares a milestone; friends tap the preview to cheer on-chain or send a small USDC grant directly from the link — no app install, no wallet redirect dance. Recovery support becomes one tap inside a social feed." />
+    </Grid>
+    <Callout kind="tip">Why judges should care: the escrow turns "I promise to stop" into a cryptographic commitment with real consequences, badges create portable, anonymous proof of recovery, and Blinks turn a private win into a shareable, fundable moment. All three are shippable on Devnet within a hackathon sprint.</Callout>
   </> },
   { id: "roadmap", group: "Colosseum", title: "Roadmap", body: <>
     <ol className="relative space-y-4 border-l border-border pl-6">
