@@ -184,6 +184,7 @@ function PostCard({ p, liked, onLike }: { p: Post; liked: boolean; onLike: (only
 
 function StoryViewer({ i, onClose, onNext }: { i: number; onClose: () => void; onNext: () => void }) {
   const st = STORIES[i];
+  if (!st) return null;
   return (
     <div className="fixed inset-0 z-50 flex flex-col p-5" style={{ background: `linear-gradient(160deg, ${hue(st.who)}, var(--background))` }} onClick={onNext}>
       <div className="flex gap-1">{STORIES.map((_, k) => <span key={k} className={`h-1 flex-1 rounded-full ${k <= i ? "bg-foreground" : "bg-foreground/30"}`} />)}</div>
