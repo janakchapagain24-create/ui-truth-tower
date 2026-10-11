@@ -31,11 +31,7 @@ export async function airdrop(addr: string) {
   return sig;
 }
 
-/**
- * Lock a commitment on-chain: transfers SOL to the accountability partner's wallet
- * is NOT done here. Instead the pledge is written as a signed memo + a self-transfer stake,
- * creating a public, timestamped, tamper-proof record without exposing recovery status.
- */
+/** Record a commitment on-chain as a memo; optional stake is sent to the trusted person, who returns it at the milestone. */
 export async function pledge(addr: string, days: number, sol: number, partner: string) {
   const { Connection, PublicKey, Transaction, TransactionInstruction, SystemProgram, LAMPORTS_PER_SOL } = await import("@solana/web3.js");
   const p = getProvider(); if (!p) throw new Error("No Solana wallet found");
