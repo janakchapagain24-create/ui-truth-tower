@@ -98,9 +98,11 @@ export type Extra = {
   coach: { date: string; count: number };
   debts: Debt[];
   pledges: Pledge[];
+  pathStage?: number; // 0-based index of current income path stage
+  planDone?: string[]; // checked plan items
 };
 const XKEY = "one-chance-extra-v1";
-const xInitial: Extra = { gameRewards: {}, surfMinutes: 0, coach: { date: "", count: 0 }, debts: [], pledges: [] };
+const xInitial: Extra = { gameRewards: {}, surfMinutes: 0, coach: { date: "", count: 0 }, debts: [], pledges: [], pathStage: 0, planDone: [] };
 let xs: Extra = xInitial;
 let xLoaded = false;
 const xListeners = new Set<() => void>();

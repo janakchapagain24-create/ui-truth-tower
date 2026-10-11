@@ -1,9 +1,9 @@
 import { DebtOrganizer } from "@/components/oc/DebtOrganizer";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { X } from "lucide-react";
-import { Card, Chip, PageHeader, Eyebrow } from "@/components/oc/ui";
-import { useStore, setState } from "@/lib/store";
+import { X, Check } from "lucide-react";
+import { Card, Chip, PageHeader, Eyebrow, Progress } from "@/components/oc/ui";
+import { useStore, setState, useExtra, setExtra } from "@/lib/store";
 
 export const Route = createFileRoute("/app/rebuild")({
   head: () => ({ meta: [{ title: "Rebuild — One Chance" }, { name: "description", content: "Your skills, resources, goal and income path." }, { property: "og:title", content: "Rebuild — One Chance" }, { property: "og:description", content: "Your skills, resources, goal and income path." }] }),
@@ -12,9 +12,16 @@ export const Route = createFileRoute("/app/rebuild")({
 
 const RESOURCES = ["Phone", "Laptop", "Internet", "Time", "Car", "Tools", "Quiet space"];
 const PATH = ["Skill", "Service", "Portfolio", "Outreach", "First client", "Repeat clients", "Business"];
+const PLANS: [string, string[]][] = [
+  ["30-day plan", ["Week 1: protection + routine", "Week 2: practice your top skill daily", "Week 3: write one clear service offer", "Week 4: reach out to 5 people"]],
+  ["90-day plan", ["Month 1: steady footing", "Month 2: build a small portfolio", "Month 3: find a first paying client"]],
+];
 
 function Rebuild() {
   const s = useStore();
+  const x = useExtra();
+  const stage = Math.min(x.pathStage ?? 0, PATH.length - 1);
+  const doneSet = new Set(x.planDone ?? []);
   const [skill, setSkill] = useState("");
   return (
     <div className="space-y-6">
@@ -51,27 +58,58 @@ function Rebuild() {
       </div>
 
       <Card>
-        <h2 className="mb-6 text-lg font-semibold">Income path</h2>
+        <div className="mb-6 flex items-baseline justify-between gap-3">
+          <h2 className="text-lg font-semibold">Income path</h2>
+          <span className="text-sm text-muted-foreground">Tap where you are now</span>
+        </div>
         <ol className="flex flex-col gap-3 md:flex-row md:items-center">
-          {PATH.map((p, i) => (
-            <li key={p} className="flex flex-1 items-center gap-3 md:flex-col md:text-center">
-              <span className={`grid size-9 shrink-0 place-items-center rounded-full text-sm font-semibold ${i < 1 ? "bg-gradient-accent text-accent-foreground" : "bg-secondary text-muted-foreground"}`}>{i + 1}</span>
-              <span className="text-sm">{p}</span>
-            </li>
-          ))}
+          {PATH.map((p, i) => {
+            const done = i < stage, now = i === stage;
+            return (
+              <li key={p} className="flex-1">
+                <button onClick={() => setExtra((e) => ({ ...e, pathStage: i }))} aria-current={now ? "step" : undefined}
+                  className="flex w-full items-center gap-3 rounded-2xl p-1 text-left transition hover:bg-secondary md:flex-col md:text-center">
+                  <span className={`grid size-9 shrink-0 place-items-center rounded-full text-sm font-semibold ${done || now ? "bg-gradient-accent text-accent-foreground" : "bg-secondary text-muted-foreground"} ${now ? "ring-2 ring-ring ring-offset-2 ring-offset-background" : ""}`}>
+                    {done ? <Check className="size-4" /> : i + 1}
+                  </span>
+                  <span className={`text-sm ${now ? "font-semibold" : ""}`}>{p}</span>
+                </button>
+              </li>
+            );
+          })}
         </ol>
+        <p className="mt-4 text-sm text-muted-foreground">Step {stage + 1} of {PATH.length}: <span className="text-foreground">{PATH[stage]}</span></p>
       </Card>
 
       <DebtOrganizer />
 
       <div className="grid gap-6 lg:grid-cols-2">
-        {[["30-day plan", ["Week 1: protection + routine", "Week 2: practice your top skill daily", "Week 3: write one clear service offer", "Week 4: reach out to 5 people"]],
-          ["90-day plan", ["Month 1: steady footing", "Month 2: build a small portfolio", "Month 3: find a first paying client"]]].map(([t, items]) => (
-          <Card key={t as string}>
-            <h2 className="mb-4 text-lg font-semibold">{t as string}</h2>
-            <ul className="space-y-2 text-sm">{(items as string[]).map((x) => <li key={x} className="rounded-2xl bg-muted p-3">{x}</li>)}</ul>
-          </Card>
-        ))}
+        {PLANS.map(([t, items]) => {
+          const n = items.filter((i) => doneSet.has(i)).length;
+          return (
+            <Card key={t}>
+              <div className="mb-3 flex items-baseline justify-between">
+                <h2 className="text-lg font-semibold">{t}</h2>
+                <span className="text-sm text-muted-foreground">{n}/{items.length} done</span>
+              </div>
+              <Progress value={(n / items.length) * 100} />
+              <ul className="mt-4 space-y-2 text-sm">
+                {items.map((it) => {
+                  const on = doneSet.has(it);
+                  return (
+                    <li key={it}>
+                      <button onClick={() => setExtra((e) => ({ ...e, planDone: on ? (e.planDone ?? []).filter((y) => y !== it) : [...(e.planDone ?? []), it] }))}
+                        className="flex w-full items-center gap-3 rounded-2xl bg-muted p-3 text-left transition hover:bg-secondary">
+                        <span className={`grid size-5 shrink-0 place-items-center rounded-full border ${on ? "border-primary bg-primary text-primary-foreground" : "border-border"}`}>{on && <Check className="size-3" />}</span>
+                        <span className={on ? "text-muted-foreground line-through" : ""}>{it}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
