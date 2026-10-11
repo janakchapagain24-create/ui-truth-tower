@@ -134,7 +134,8 @@ function Docs() {
   useEffect(() => { const h = window.location.hash.slice(1); if (PAGES.some((p) => p.id === h)) setId(h); }, []);
   const go = (n: string) => { setId(n); setOpen(false); history.replaceState(null, "", `#${n}`); window.scrollTo({ top: 0 }); };
   const idx = PAGES.findIndex((p) => p.id === id);
-  const page = PAGES[idx];
+  const page = PAGES[Math.max(idx, 0)]!;
+  const prev = PAGES[idx - 1], next = PAGES[idx + 1];
   const shown = useMemo(() => PAGES.filter((p) => p.title.toLowerCase().includes(q.toLowerCase())), [q]);
 
   const nav = (
@@ -167,8 +168,8 @@ function Docs() {
           <h1 className="font-display text-3xl font-semibold leading-tight md:text-5xl">{page.title}</h1>
           <article key={page.id} className="fade-up space-y-5">{page.body}</article>
           <div className="grid grid-cols-2 gap-3 border-t border-border/60 pt-6">
-            {idx > 0 ? <button onClick={() => go(PAGES[idx - 1].id)} className="glass rounded-2xl p-4 text-left"><span className="flex items-center gap-1 text-xs text-muted-foreground"><ChevronLeft className="size-3" />Previous</span><span className="text-sm font-medium">{PAGES[idx - 1].title}</span></button> : <span />}
-            {idx < PAGES.length - 1 && <button onClick={() => go(PAGES[idx + 1].id)} className="glass rounded-2xl p-4 text-right"><span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">Next<ChevronRight className="size-3" /></span><span className="text-sm font-medium">{PAGES[idx + 1].title}</span></button>}
+            {prev ? <button onClick={() => go(prev.id)} className="glass rounded-2xl p-4 text-left"><span className="flex items-center gap-1 text-xs text-muted-foreground"><ChevronLeft className="size-3" />Previous</span><span className="text-sm font-medium">{prev.title}</span></button> : <span />}
+            {next && <button onClick={() => go(next.id)} className="glass rounded-2xl p-4 text-right"><span className="flex items-center justify-end gap-1 text-xs text-muted-foreground">Next<ChevronRight className="size-3" /></span><span className="text-sm font-medium">{next.title}</span></button>}
           </div>
         </main>
       </div>
