@@ -16,6 +16,7 @@ import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppCoachRouteImport } from './routes/app.coach'
 import { Route as AppCommunityRouteImport } from './routes/app.community'
 import { Route as AppEmergencyRouteImport } from './routes/app.emergency'
+import { Route as AppGamesRouteImport } from './routes/app.games'
 import { Route as AppMissionsRouteImport } from './routes/app.missions'
 import { Route as AppProgressRouteImport } from './routes/app.progress'
 import { Route as AppProtectRouteImport } from './routes/app.protect'
@@ -57,6 +58,11 @@ const AppEmergencyRoute = AppEmergencyRouteImport.update({
   path: '/emergency',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGamesRoute = AppGamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMissionsRoute = AppMissionsRouteImport.update({
   id: '/missions',
   path: '/missions',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
+  '/app/games': typeof AppGamesRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
+  '/app/games': typeof AppGamesRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
+  '/app/games': typeof AppGamesRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/progress': typeof AppProgressRoute
   '/app/protect': typeof AppProtectRoute
@@ -134,6 +143,7 @@ export interface FileRouteTypes {
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
+    | '/app/games'
     | '/app/missions'
     | '/app/progress'
     | '/app/protect'
@@ -147,6 +157,7 @@ export interface FileRouteTypes {
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
+    | '/app/games'
     | '/app/missions'
     | '/app/progress'
     | '/app/protect'
@@ -161,6 +172,7 @@ export interface FileRouteTypes {
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
+    | '/app/games'
     | '/app/missions'
     | '/app/progress'
     | '/app/protect'
@@ -226,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppEmergencyRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/games': {
+      id: '/app/games'
+      path: '/games'
+      fullPath: '/app/games'
+      preLoaderRoute: typeof AppGamesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/missions': {
       id: '/app/missions'
       path: '/missions'
@@ -268,6 +287,7 @@ interface AppRouteChildren {
   AppCoachRoute: typeof AppCoachRoute
   AppCommunityRoute: typeof AppCommunityRoute
   AppEmergencyRoute: typeof AppEmergencyRoute
+  AppGamesRoute: typeof AppGamesRoute
   AppMissionsRoute: typeof AppMissionsRoute
   AppProgressRoute: typeof AppProgressRoute
   AppProtectRoute: typeof AppProtectRoute
@@ -280,6 +300,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppCoachRoute: AppCoachRoute,
   AppCommunityRoute: AppCommunityRoute,
   AppEmergencyRoute: AppEmergencyRoute,
+  AppGamesRoute: AppGamesRoute,
   AppMissionsRoute: AppMissionsRoute,
   AppProgressRoute: AppProgressRoute,
   AppProtectRoute: AppProtectRoute,

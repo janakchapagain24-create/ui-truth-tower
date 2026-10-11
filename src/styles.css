@@ -100,9 +100,54 @@
   --shadow-glow: 0 0 0 1px oklch(0.82 0.09 175 / 30%), 0 12px 40px -10px oklch(0.82 0.09 175 / 40%);
 }
 
+
+html.light {
+  --background: oklch(0.975 0.005 90);
+  --foreground: oklch(0.2 0.01 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.01 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.01 250);
+  --primary: oklch(0.2 0.01 250);
+  --primary-foreground: oklch(0.98 0.005 90);
+  --secondary: oklch(0 0 0 / 6%);
+  --secondary-foreground: oklch(0.2 0.01 250);
+  --muted: oklch(0 0 0 / 4%);
+  --muted-foreground: oklch(0.48 0.015 250);
+  --accent: oklch(0.6 0.11 180);
+  --accent-foreground: oklch(0.99 0 0);
+  --success: oklch(0.58 0.13 160);
+  --warning: oklch(0.68 0.13 70);
+  --destructive: oklch(0.58 0.2 25);
+  --glass: oklch(1 0 0 / 70%);
+  --glass-border: oklch(0 0 0 / 8%);
+  --border: oklch(0 0 0 / 9%);
+  --input: oklch(0 0 0 / 12%);
+  --ring: oklch(0.6 0.11 180);
+  --sidebar: oklch(0.99 0.003 90);
+  --sidebar-foreground: oklch(0.2 0.01 250);
+  --sidebar-primary: oklch(0.2 0.01 250);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0 0 0 / 6%);
+  --sidebar-accent-foreground: oklch(0.2 0.01 250);
+  --sidebar-border: oklch(0 0 0 / 8%);
+  --sidebar-ring: oklch(0.6 0.11 180);
+  --gradient-aurora:
+    radial-gradient(60% 50% at 15% 0%, oklch(0.85 0.07 200 / 45%), transparent 70%),
+    radial-gradient(50% 40% at 90% 10%, oklch(0.88 0.05 280 / 40%), transparent 70%),
+    radial-gradient(60% 50% at 50% 100%, oklch(0.9 0.06 160 / 35%), transparent 70%);
+  --gradient-accent: linear-gradient(135deg, oklch(0.65 0.11 175), oklch(0.6 0.1 250));
+  --shadow-glass: 0 1px 0 0 oklch(1 0 0 / 60%) inset, 0 12px 32px -16px oklch(0.3 0.02 250 / 25%);
+}
+
+:root {
+  --gradient-story: conic-gradient(from 180deg, oklch(0.82 0.15 60), oklch(0.68 0.2 15), oklch(0.6 0.2 330), oklch(0.82 0.15 60));
+}
+
 @layer base {
   * { border-color: var(--color-border); }
   html { color-scheme: dark; }
+  html.light { color-scheme: light; }
   body {
     background-color: var(--color-background);
     background-image: var(--gradient-aurora);
@@ -140,3 +185,12 @@
   50% { transform: scale(1.1); opacity: 1; }
 }
 @utility breathe { animation: breathe 8s ease-in-out infinite; }
+
+@utility bg-gradient-story { background: var(--gradient-story); }
+@keyframes pop-heart {
+  0% { transform: scale(0); opacity: 0; }
+  30% { transform: scale(1.2); opacity: 1; }
+  70% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1.1); opacity: 0; }
+}
+@utility pop-heart { animation: pop-heart 0.9s ease-out both; }
