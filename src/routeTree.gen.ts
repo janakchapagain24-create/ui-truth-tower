@@ -13,7 +13,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as BlockedRouteImport } from './routes/blocked'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as ApiCoachRouteImport } from './routes/api/coach'
+import { Route as ApiDocsAiRouteImport } from './routes/api/docs-ai'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppCoachRouteImport } from './routes/app.coach'
 import { Route as AppCommunityRouteImport } from './routes/app.community'
@@ -46,9 +48,19 @@ const BlockedRoute = BlockedRouteImport.update({
   path: '/blocked',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiCoachRoute = ApiCoachRouteImport.update({
   id: '/api/coach',
   path: '/api/coach',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDocsAiRoute = ApiDocsAiRouteImport.update({
+  id: '/api/docs-ai',
+  path: '/api/docs-ai',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -112,7 +124,9 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
+  '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -129,7 +143,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
+  '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -148,7 +164,9 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRoute
   '/blocked': typeof BlockedRoute
+  '/docs': typeof DocsRoute
   '/api/coach': typeof ApiCoachRoute
+  '/api/docs-ai': typeof ApiDocsAiRoute
   '/app/coach': typeof AppCoachRoute
   '/app/community': typeof AppCommunityRoute
   '/app/emergency': typeof AppEmergencyRoute
@@ -168,7 +186,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
+    | '/api/docs-ai'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -185,7 +205,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
+    | '/api/docs-ai'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -203,7 +225,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/auth'
     | '/blocked'
+    | '/docs'
     | '/api/coach'
+    | '/api/docs-ai'
     | '/app/coach'
     | '/app/community'
     | '/app/emergency'
@@ -222,7 +246,9 @@ export interface RootRouteChildren {
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRoute
   BlockedRoute: typeof BlockedRoute
+  DocsRoute: typeof DocsRoute
   ApiCoachRoute: typeof ApiCoachRoute
+  ApiDocsAiRoute: typeof ApiDocsAiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -255,11 +281,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlockedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/coach': {
       id: '/api/coach'
       path: '/api/coach'
       fullPath: '/api/coach'
       preLoaderRoute: typeof ApiCoachRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/docs-ai': {
+      id: '/api/docs-ai'
+      path: '/api/docs-ai'
+      fullPath: '/api/docs-ai'
+      preLoaderRoute: typeof ApiDocsAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -377,7 +417,9 @@ const rootRouteChildren: RootRouteChildren = {
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRoute,
   BlockedRoute: BlockedRoute,
+  DocsRoute: DocsRoute,
   ApiCoachRoute: ApiCoachRoute,
+  ApiDocsAiRoute: ApiDocsAiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
