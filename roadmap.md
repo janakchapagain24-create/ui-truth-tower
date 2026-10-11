@@ -10,3 +10,15 @@
 - [ ] Debt organizer, business builder, weekly AI review
 - [ ] Admin dashboard (users, blocklist intelligence, missions, moderation, audit)
 - [ ] Native companion apps for device-level blocking (outside web scope)
+
+## Phase 2 (done)
+- [x] Live AI Coach (10 free messages/day)
+- [x] Games earn +20 credits for 3+ min urge surf (max 3/day)
+- [x] Debt organizer (snowball/avalanche)
+- [x] Real device blocking: NextDNS iPhone profile, Android Private DNS, hosts blocklist
+- [x] Solana Commitment Vault (Devnet memo + optional stake to trusted person)
+
+## Open (blocked)
+- [ ] Accounts + shared community/work data — needs Lovable Cloud enabled
+- [ ] Custom Solana escrow program (Anchor) — needs a Rust toolchain/deploy outside Lovable
+- [ ] Work payouts — needs a payment provider decision
